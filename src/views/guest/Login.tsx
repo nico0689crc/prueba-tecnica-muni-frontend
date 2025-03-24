@@ -47,11 +47,13 @@ const Login = () => {
             setStatus({ success: true });
             setSubmitting(false);
           } catch (err: unknown) {
+            console.log(err);
+            
             setStatus({ success: false });
             if (err instanceof Error) {
               setErrors({ submit: err.message });
             } else {
-              setErrors({ submit: 'An unknown error occurred' });
+                setErrors({ submit: 'Se ha producido un error interno. Por favor, inténtelo de nuevo más tarde.' });
             }
             setSubmitting(false);
           }
