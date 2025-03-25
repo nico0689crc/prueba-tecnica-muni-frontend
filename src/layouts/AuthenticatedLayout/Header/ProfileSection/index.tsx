@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -17,35 +17,39 @@ import useAuth from '@/hooks/useAuth';
 import { IconLogout, IconUser, IconUserCircle } from '@tabler/icons-react';
 import { IconButton } from '@mui/material';
 import ListItemButton from './ListItemButton';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileSection() {
   const theme = useTheme();
+  const navigate = useNavigate();
   const { logout, user } = useAuth();
   const [open, setOpen] = useState(false);
 
   const anchorRef = useRef<any>(null);
   
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
-      await logout();
+      logout();
+      navigate('/login', { replace: true });
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [logout]);
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     setOpen((prevOpen) => !prevOpen);
-  };
+  }, []);
 
-  const handleClose = (event: React.MouseEvent<HTMLDivElement> | MouseEvent | TouchEvent) => {
+  const handleClose = useCallback((event: React.MouseEvent<HTMLDivElement> | MouseEvent | TouchEvent) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
 
     setOpen(false);
-  };
+  }, []);
 
   const prevOpen = useRef(open);
+
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
@@ -53,6 +57,10 @@ export default function ProfileSection() {
 
     prevOpen.current = open;
   }, [open]); 
+
+  const handleProfile = useCallback(() => {
+    navigate('/perfil');
+  }, [navigate]);
 
   return (
     <>
@@ -112,7 +120,7 @@ export default function ProfileSection() {
                           borderRadius: 12,
                         }}
                       >
-                        <ListItemButton icon={<IconUser />} text='Perfil'/>
+                        <ListItemButton icon={<IconUser />} text='Perfil' action={handleProfile}/>
                         <ListItemButton icon={<IconLogout />} text='Salir' action={handleLogout}/>
                       </List>
                     </Box>

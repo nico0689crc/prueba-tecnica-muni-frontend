@@ -197,7 +197,7 @@ const EditarTareasPage = () => {
             }}
             validationSchema={Yup.object().shape({
               titulo: Yup.string().required("El título es obligatorio"),
-              detalles: Yup.string().required("La descripción es obligatoria"),
+              detalles: Yup.string().required("El detalle es obligatorio"),
             })}
             onSubmit={async (values) => {
               try {
@@ -384,7 +384,7 @@ const renderFormFields = ({
           exclusive
           aria-label="Prioridad"
           orientation={isUpSm ? "horizontal" : "vertical"}
-          onChange={(e, newPrioridad) =>
+          onChange={(_e, newPrioridad) =>
             handleChange({
               target: { name: "prioridad", value: newPrioridad } as EventTarget &
                 HTMLInputElement,
@@ -417,7 +417,7 @@ const renderFormFields = ({
           exclusive
           aria-label="Estado"
           orientation={isUpSm ? "horizontal" : "vertical"}
-          onChange={(e, newEstado) =>
+          onChange={(_e, newEstado) =>
             handleChange({
               target: { name: "estado", value: newEstado } as EventTarget &
                 HTMLInputElement,

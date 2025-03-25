@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 
-import { Card, Stack, Typography } from "@mui/material";
-import { IconHome, IconTableSpark } from '@tabler/icons-react';
+import { Button, Card, IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
+import { IconCirclePlusFilled, IconHome, IconTableSpark } from '@tabler/icons-react';
 
 import { useGetTareas } from "@/hooks/useTareas";
 
@@ -11,9 +11,12 @@ import CargandoDatos from "@/ui-component/CargandoDatos.tsx";
 
 import SinTareas from "./SinTareas";
 import TareasLista from "./TareasLista.tsx";
+import useAuth from "@/hooks/useAuth.ts";
 
 const Tareas = () => {
   const [searchParams] = useSearchParams();
+  const { user } = useAuth();
+  const isUpMd = useMediaQuery((theme) => theme.breakpoints.up("md"));
   const navigate = useNavigate();
   const paginaDesdeUrl = searchParams.get('pagina') ? parseInt(searchParams.get('pagina')!) : 1;
   const [pagina, setPagina] = useState<number>(paginaDesdeUrl);
@@ -44,13 +47,24 @@ const Tareas = () => {
           ]
         }
       />
-      <Card variant='outlined' sx={{ px: 3, py: 2, borderRadius: 2 }}>
+      <Card variant='outlined' sx={{ display: "flex", px: 3, py: 2, borderRadius: 2, justifyContent: 'space-between' }}>
         <Stack sx={{ "svg": { color: theme => theme.palette.primary.main } }} direction='row' spacing={1} alignItems='center'>
           <IconTableSpark size={15} /> 
           <Typography variant='h6' color="primary">
-            Tareas asignadas
+            Tareas
           </Typography>
         </Stack>
+        {user?.role === 'admin' && (
+          isUpMd ? (
+            <Button component={Link} to="/tareas/agregar" variant='contained' color='primary' startIcon={<IconCirclePlusFilled size={20} />}>
+              Agregar Tarea
+            </Button>
+          ) : (
+            <IconButton component={Link} to="/tareas/agregar"  color='primary'>
+              <IconCirclePlusFilled size={30} />
+            </IconButton>
+          )
+        )}
       </Card>
       <Stack direction='column' spacing={2} height='100%'>
         {isLoading && <CargandoDatos mensaje="Cargando datos..." />}

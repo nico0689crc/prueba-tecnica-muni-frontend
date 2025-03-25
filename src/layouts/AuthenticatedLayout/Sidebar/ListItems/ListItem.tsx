@@ -5,9 +5,10 @@ type ListItemCustomProps = {
   icon: React.ReactNode;
   text: string;
   to: string;
+  isActive: boolean;
 };
 
-const ListItemCustom = ({ icon, text, to }: ListItemCustomProps) => {
+const ListItemCustom = ({ icon, text, to, isActive }: ListItemCustomProps) => {
   return (
     <ListItem sx={{ py: 0 }}>
       <ListItemButton 
@@ -22,22 +23,24 @@ const ListItemCustom = ({ icon, text, to }: ListItemCustomProps) => {
           ".MuiListItemIcon-root": {
             minWidth: 'inherit',
             marginRight: '10px',
-            color: theme.palette.primary.main,
+            color: isActive ? theme.palette.primary.dark : theme.palette.primary.main,
             transition: theme.transitions.create('color', {
               duration: theme.transitions.duration.shortest,
               easing: theme.transitions.easing.easeInOut,
             }),
           },
           "span": {
-            color: theme.palette.primary.main,
+            color: isActive ? theme.palette.primary.dark : theme.palette.primary.main,
+            fontWeight: isActive ? 'bold' : 'normal',
             transition: theme.transitions.create('color', {
               duration: theme.transitions.duration.shortest,
               easing: theme.transitions.easing.easeInOut,
             }),
           },
+          bgcolor: isActive ? alpha(theme.palette.primary.main, 0.15) : 'transparent',
+          borderRadius: 1,
           '&:hover': {
             bgcolor: alpha(theme.palette.primary.main, 0.08),
-            borderRadius: 1,
           },
         })}
       >

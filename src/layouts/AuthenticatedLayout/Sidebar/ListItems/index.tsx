@@ -1,6 +1,7 @@
 import React from 'react';
 import { IconHome, IconTableSpark, IconUsersGroup } from '@tabler/icons-react';
 import { List } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import ListItemCustom from './ListItem';
 import useAuth from '@/hooks/useAuth';
 
@@ -33,7 +34,9 @@ const items: Item[] = [
 ]
 
 const ListItems = () => {
-  const { user } = useAuth(); 
+  const { user } = useAuth();
+  const location = useLocation();
+
   return (
     <List sx={{ 
       display: 'flex',
@@ -43,8 +46,9 @@ const ListItems = () => {
       height: '100%'
     }}>
       {items.map((item, index) => {
+        const isActive = location.pathname.includes(item.to);
         if (!item.adminProtected || (item.adminProtected && user?.role === 'admin')) {
-          return <ListItemCustom key={index} {...item} />
+          return <ListItemCustom key={index} {...item} isActive={isActive} />
         }
       })}
     </List>
