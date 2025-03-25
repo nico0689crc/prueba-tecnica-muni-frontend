@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Card, Stack, Typography } from "@mui/material";
-import { IconHome, IconTableSpark, IconUsersGroup } from '@tabler/icons-react';
+import { IconHome, IconTableSpark } from '@tabler/icons-react';
 
 import { useGetTareas } from "@/hooks/useTareas";
 
@@ -16,14 +16,14 @@ const Tareas = () => {
   const paginaDesdeUrl = searchParams.get('pagina') ? parseInt(searchParams.get('pagina')!) : 1;
   const [pagina, setPagina] = useState<number>(paginaDesdeUrl);
 
-  const { tareas, isLoading, isEmpty, paginas } = useGetTareas({ pagina, tamanoPagina: 6 });
+  const { tareas, isLoading, isEmpty, paginas } = useGetTareas({ pagina });
 
   const handleCambioDePagina = useCallback((_: any, nuevaPagina: number) => {
     setPagina(() => nuevaPagina);
   }, []);
 
   useEffect(() => {
-    setPagina( () => paginaDesdeUrl);
+    setPagina(() => paginaDesdeUrl);
   }, [paginaDesdeUrl]);
 
   useEffect(() => {

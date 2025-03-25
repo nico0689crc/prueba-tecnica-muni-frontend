@@ -5,7 +5,7 @@ type EliminarTareaContextProps = {
   tarea: Tarea | null;
   isDialogEliminarTareaOpen: boolean;
   openEliminarTareaDialog: (_tarea: Tarea) => void;
-  handleEliminarTarea: () => void;
+  handleEliminarTarea: (page: number) => void;
   closeEliminarTareaDialog: () => void;
 }
 

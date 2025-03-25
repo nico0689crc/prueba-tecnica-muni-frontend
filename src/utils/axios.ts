@@ -34,3 +34,28 @@ export async function fetcher(args: string | [string, AxiosRequestConfig]) {
 
   return res.data;
 }
+
+export async function postFetcher(args: string | [string, AxiosRequestConfig]) {
+
+  const [url, data] = Array.isArray(args) ? args : [args];
+
+  const res = await axiosServices.post(url, data);
+
+  return res.data;
+}
+
+export async function putFetcher(args: string | [string, AxiosRequestConfig]) {
+  const [url, data] = Array.isArray(args) ? args : [args];
+
+  const res = await axiosServices.put(url, data);
+
+  return res.data;
+}
+
+export async function deleteFetcher(args: string | [string, AxiosRequestConfig]) {
+  const [url, data] = Array.isArray(args) ? args : [args];
+
+  const res = await axiosServices.delete(url, data);
+
+  return res.data;
+}

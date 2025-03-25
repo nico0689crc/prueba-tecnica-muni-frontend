@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useSearchParams } from "react-router-dom";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -21,6 +22,7 @@ const Transition = React.forwardRef(function Transition(
 
 const EliminarTareaDialog = () => {
   const { tarea, isDialogEliminarTareaOpen, closeEliminarTareaDialog, handleEliminarTarea } = useEliminarTarea();
+  const [searchParams, _setSearchParams] = useSearchParams();
  
   return (
     <Dialog
@@ -39,7 +41,7 @@ const EliminarTareaDialog = () => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button startIcon={<IconTrash />} onClick={handleEliminarTarea} variant='contained' color='error'>Eliminar</Button>
+        <Button startIcon={<IconTrash />} onClick={() => handleEliminarTarea(parseInt(searchParams.get('pagina') ?? '1'))} variant='contained' color='error'>Eliminar</Button>
         <Button startIcon={<IconX />} onClick={closeEliminarTareaDialog} variant='outlined' color='error'>Cancelar</Button>
       </DialogActions>
     </Dialog>

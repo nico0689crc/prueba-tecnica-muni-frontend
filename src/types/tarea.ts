@@ -1,3 +1,5 @@
+import { KeyedMutator } from "swr";
+
 export type Tarea = {
   id: number;
   titulo: string;
@@ -48,5 +50,6 @@ export type GetTareasType = {
   data: TareasResponse, 
   isLoading: boolean, 
   error: any,
-  isValidating: boolean 
+  isValidating: boolean,
+  mutate: KeyedMutator<any>
 }
