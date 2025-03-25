@@ -32,6 +32,7 @@ import {
   IconPencilX,
   IconTableSpark,
   IconTrash,
+  IconCirclePlusFilled
 } from "@tabler/icons-react";
 
 import CustomBreadcrumbs from "@/ui-component/Breadcrumb";
@@ -39,17 +40,19 @@ import CargandoDatos from "@/ui-component/CargandoDatos.tsx";
 import { useGetTarea } from "@/hooks/useTareas";
 import useAuth from "@/hooks/useAuth";
 import useSnackbar from "@/hooks/useSnackbar";
-import { deleteFetcher, putFetcher } from "@/utils/axios";
+import { deleteFetcher, postFetcher, putFetcher } from "@/utils/axios";
+import { useUsuarios } from "@/hooks/useUsuarios";
 
 const EditarTareasPage = () => {
   const { id } = useParams<{ id: string }>();
   const { tarea, isLoading } = useGetTarea(parseInt(id!));
   const isUpSm = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   const { user } = useAuth();
+  const { usuarios } = useUsuarios();
   const { openSnackbar } = useSnackbar();
   const { mutate } = useSWRConfig();
   const [ miEstado, setMiEstado ] = useState<"pendiente" | "en_progreso" | "finalizado" | null>(null);
-
+  
   useEffect(() => {
     if (tarea) {
       setMiEstado(tarea.usuarios.find(usuario => usuario.id === parseInt(user?.id!))!.pivot.estado);
@@ -214,54 +217,98 @@ const EditarTareasPage = () => {
               isSubmitting,
               touched,
               values,
-            }) => (
-              <form noValidate onSubmit={handleSubmit}>
-                <Grid2 container spacing={2}>
-                  {renderFormFields({
-                    values,
-                    errors,
-                    touched,
-                    handleChange,
-                    handleBlur,
-                    isSubmitting,
-                    isUpSm,
-                    miEstado,
-                    onChangeMiEstadoHandler
-                  })}
-                  <Divider sx={{ width: "100%" }} />
-                  <Grid2 size={12}>
-                    <Stack spacing={2}>
-                      <InputLabel sx={{ fontWeight: "bold" }} htmlFor="usuarios">
-                        Usuarios
-                      </InputLabel>
-                      <Stack spacing={2}>{renderUsuarios()}</Stack>
-                    </Stack>
+              setValues
+            }) => { 
+              useEffect(() => {
+                setValues({
+                  titulo: tarea.titulo,
+                  detalles: tarea.detalles,
+                  prioridad: tarea.prioridad,
+                  estado: tarea.estado,
+                });
+              }, [tarea, setValues]);
+
+              return (
+                <form noValidate onSubmit={handleSubmit}>
+                  <Grid2 container spacing={2}>
+                    {renderFormFields({
+                      values,
+                      errors,
+                      touched,
+                      handleChange,
+                      handleBlur,
+                      isSubmitting,
+                      isUpSm,
+                      miEstado,
+                      onChangeMiEstadoHandler
+                    })}
+                    <Divider sx={{ width: "100%" }} />
+                    <Grid2 size={12}>
+                      <Stack spacing={2}>
+                        <InputLabel sx={{ fontWeight: "bold" }} htmlFor="usuarios">
+                          Usuarios
+                        </InputLabel>
+                        <Stack spacing={2}>{renderUsuarios()}</Stack>
+                        <Stack spacing={2}>
+                          {
+                            usuarios?.filter(usuario => tarea.usuarios.findIndex(u => u.id === usuario.id) === -1).map(usuario => (
+                              <Stack key={usuario.id} direction="row" spacing={1} alignItems="center">
+                                <Avatar
+                                  alt={`${usuario.first_name} ${usuario.last_name}`}
+                                  src={`https://ui-avatars.com/api/?name=${usuario.first_name}+${usuario.last_name}&background=random&color=fff`}
+                                />
+                                <Typography variant="body2" color="textPrimary">
+                                  {`${usuario.first_name} ${usuario.last_name}`}
+                                </Typography>
+                                <Tooltip title="Agregar usuario" arrow>
+                                  <IconButton
+                                    color="success"
+                                    size="small"
+                                    onClick={async () => {
+                                      try {
+                                        await postFetcher(`/tareas/${tarea.id}/usuarios/${usuario.id}`);
+                                        mutate(`/tareas/${tarea.id}`);
+                                        openSnackbar("Usuario asignado correctamente", "success");
+                                      } catch (error: any) {
+                                        openSnackbar(error.message, "error");
+                                      }
+                                    }}
+                                  >
+                                    <IconCirclePlusFilled size={20} />
+                                  </IconButton>
+                                </Tooltip>
+                              </Stack>
+                            ))
+                          }
+                        </Stack>
+                      </Stack>
+                    </Grid2>
+                    <Divider sx={{ width: "100%" }} />
+                    <Grid2 size={12}>
+                      <Stack direction="row" spacing={2} justifyContent="flex-end">
+                        <Button
+                          component={Link}
+                          to={"/tareas"}
+                          variant="outlined"
+                          color="error"
+                          type="button"
+                        >
+                          Cancelar
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          type="submit"
+                          disabled={isSubmitting}
+                        >
+                          Guardar cambios
+                        </Button>
+                      </Stack>
+                    </Grid2>
                   </Grid2>
-                  <Divider sx={{ width: "100%" }} />
-                  <Grid2 size={12}>
-                    <Stack direction="row" spacing={2} justifyContent="flex-end">
-                      <Button
-                        component={Link}
-                        to={"/tareas"}
-                        variant="outlined"
-                        color="error"
-                        type="button"
-                      >
-                        Cancelar
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        disabled={isSubmitting}
-                      >
-                        Guardar cambios
-                      </Button>
-                    </Stack>
-                  </Grid2>
-                </Grid2>
-              </form>
-            )}
+                </form>
+              )
+            }}
           </Formik>
         </Card>
       </Stack>
@@ -364,34 +411,6 @@ const renderFormFields = ({
     </Grid2>
     <Grid2 size={12}>
       <Stack spacing={2}>
-        <InputLabel sx={{ fontWeight: "bold" }}>Mi estado</InputLabel>
-        <ToggleButtonGroup
-          value={miEstado}
-          exclusive
-          aria-label="Estado"
-          orientation={isUpSm ? "horizontal" : "vertical"}
-          onChange={onChangeMiEstadoHandler}
-        >
-          <ToggleButton value="pendiente" color="warning">
-            <IconPencilX size={20} />
-            Pendiente
-          </ToggleButton>
-          <ToggleButton value="en_progreso" color="info">
-            <IconPencilShare size={20} />
-            En Progreso
-          </ToggleButton>
-          <ToggleButton value="finalizado" color="success">
-            <IconPencilCheck size={20} />
-            Finalizado
-          </ToggleButton>
-        </ToggleButtonGroup>
-        {errors.estado && (
-          <FormHelperText error>{errors.estado}</FormHelperText>
-        )}
-      </Stack>
-    </Grid2>
-    <Grid2 size={12}>
-      <Stack spacing={2}>
         <InputLabel sx={{ fontWeight: "bold" }}>Estado de la tarea</InputLabel>
         <ToggleButtonGroup
           value={values.estado}
@@ -416,6 +435,34 @@ const renderFormFields = ({
           <ToggleButton value="completado" color="success">
             <IconPencilCheck size={20} />
             Completado
+          </ToggleButton>
+        </ToggleButtonGroup>
+        {errors.estado && (
+          <FormHelperText error>{errors.estado}</FormHelperText>
+        )}
+      </Stack>
+    </Grid2>
+    <Grid2 size={12}>
+      <Stack spacing={2}>
+        <InputLabel sx={{ fontWeight: "bold" }}>Mi estado</InputLabel>
+        <ToggleButtonGroup
+          value={miEstado}
+          exclusive
+          aria-label="Estado"
+          orientation={isUpSm ? "horizontal" : "vertical"}
+          onChange={onChangeMiEstadoHandler}
+        >
+          <ToggleButton value="pendiente" color="warning">
+            <IconPencilX size={20} />
+            Pendiente
+          </ToggleButton>
+          <ToggleButton value="en_progreso" color="info">
+            <IconPencilShare size={20} />
+            En Progreso
+          </ToggleButton>
+          <ToggleButton value="finalizado" color="success">
+            <IconPencilCheck size={20} />
+            Finalizado
           </ToggleButton>
         </ToggleButtonGroup>
         {errors.estado && (
