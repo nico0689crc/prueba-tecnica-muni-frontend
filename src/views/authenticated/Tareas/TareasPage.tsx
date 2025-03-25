@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from 'react-router-dom';
+
 import { Card, Stack, Typography } from "@mui/material";
 import { IconHome, IconTableSpark } from '@tabler/icons-react';
 
 import { useGetTareas } from "@/hooks/useTareas";
 
-import SinTareas from "./SinTareas";
-import CargadoTareas from "./CargadoTareas";
-import TareasLista from "./TareasLista.tsx";
 import CustomBreadcrumbs from "@/ui-component/Breadcrumb.tsx";
+import CargandoDatos from "@/ui-component/CargandoDatos.tsx";
+
+import SinTareas from "./SinTareas";
+import TareasLista from "./TareasLista.tsx";
 
 const Tareas = () => {
   const [searchParams] = useSearchParams();
@@ -51,7 +53,7 @@ const Tareas = () => {
         </Stack>
       </Card>
       <Stack direction='column' spacing={2} height='100%'>
-        {isLoading && <CargadoTareas />}
+        {isLoading && <CargandoDatos mensaje="Cargando datos..." />}
         {!isLoading && isEmpty && <SinTareas />}
         {!isLoading && !isEmpty && (
           <TareasLista 

@@ -44,11 +44,8 @@ export async function postFetcher(args: string | [string, AxiosRequestConfig]) {
   return res.data;
 }
 
-export async function putFetcher(args: string | [string, AxiosRequestConfig]) {
-  const [url, data] = Array.isArray(args) ? args : [args];
-
+export async function putFetcher(url: string, data: any) {
   const res = await axiosServices.put(url, data);
-
   return res.data;
 }
 

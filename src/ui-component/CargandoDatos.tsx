@@ -1,6 +1,10 @@
 import { Stack, CircularProgress, Typography } from "@mui/material";
 
-const CargadoTareas = () => {
+type CargadoDatosProps = {
+  mensaje: string;
+}
+
+const CargadoDatos = ({ mensaje } : CargadoDatosProps) => {
   return (
     <Stack 
       sx={{ 
@@ -14,10 +18,10 @@ const CargadoTareas = () => {
     >
       <CircularProgress />
       <Typography variant='body1' color="primary">
-        Cargando tareas...
+        {mensaje}
       </Typography>
     </Stack>
   );
 } 
 
-export default CargadoTareas;
+export default CargadoDatos;

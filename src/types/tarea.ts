@@ -1,11 +1,9 @@
-import { KeyedMutator } from "swr";
-
 export type Tarea = {
   id: number;
   titulo: string;
   detalles: string;
-  estado: string;
-  prioridad: string;
+  estado: 'pendiente'| 'en_progreso' | 'completado';
+  prioridad: 'baja' | 'media' | 'alta';
   created_at: string;
   updated_at: string;
   usuarios: Usuario[];
@@ -20,7 +18,7 @@ export type Usuario = {
   pivot: {
     tarea_id: number;
     user_id: number;
-    estado: string;
+    estado: 'pendiente' | 'en_progreso' | 'finalizado';
   };
 };
 
@@ -51,5 +49,11 @@ export type GetTareasType = {
   isLoading: boolean, 
   error: any,
   isValidating: boolean,
-  mutate: KeyedMutator<any>
+}
+
+export type GetTareaType = {
+  data: Tarea,
+  isLoading: boolean,
+  error: any,
+  isValidating: boolean,
 }

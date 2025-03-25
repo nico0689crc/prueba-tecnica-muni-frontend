@@ -10,11 +10,11 @@ interface RoleGuardProps {
 const RoleGuard: FC<RoleGuardProps> = ({ children, requiredRole = 'admin' }) => {
   const { user } = useAuth();
 
-  return user?.role === requiredRole ? (
-    <>{children}</>
-  ) : (
-    <Navigate to="/no-autorizado" replace />
-  );
+  if (user?.role === requiredRole) {
+    return <>{children}</>;
+  }
+
+  return <Navigate to="/no-autorizado" replace />
 };
 
 export default RoleGuard;
