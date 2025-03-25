@@ -1,12 +1,14 @@
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Stack, Typography } from "@mui/material";
+import { Card, Stack, Typography } from "@mui/material";
+import { IconHome, IconTableSpark, IconUsersGroup } from '@tabler/icons-react';
 
 import { useGetTareas } from "@/hooks/useTareas";
 
 import SinTareas from "./SinTareas";
 import CargadoTareas from "./CargadoTareas";
 import TareasLista from "./TareasLista.tsx";
-import { useCallback, useEffect, useState } from "react";
+import CustomBreadcrumbs from "@/ui-component/Breadcrumb.tsx";
 
 const Tareas = () => {
   const [searchParams] = useSearchParams();
@@ -31,21 +33,35 @@ const Tareas = () => {
   }, [pagina, paginaDesdeUrl]);
 
   return (
-    <Stack direction='column' spacing={2} height='100%'>
-      <Typography variant='h5' color="primary">
-        Tareas
-      </Typography>
-      
-      {isLoading && <CargadoTareas />}
-      {!isLoading && isEmpty && <SinTareas />}
-      {!isLoading && !isEmpty && (
-        <TareasLista 
-          tareas={tareas} 
-          paginas={paginas} 
-          paginaActual={pagina} 
-          handleCambioDePagina={handleCambioDePagina}
-        />
-      )}
+    <Stack direction='column' spacing={2}>
+      <CustomBreadcrumbs
+        items={
+          [
+            { label: 'Inicio', to: '/', icon: <IconHome size={15} /> },
+            { label: 'Tareas', to: '/tareas', icon: <IconTableSpark size={15} /> }
+          ]
+        }
+      />
+      <Card variant='outlined' sx={{ px: 3, py: 2, borderRadius: 2 }}>
+        <Stack sx={{ "svg": { color: theme => theme.palette.primary.main } }} direction='row' spacing={1} alignItems='center'>
+          <IconTableSpark size={15} /> 
+          <Typography variant='h6' color="primary">
+            Tareas asignadas
+          </Typography>
+        </Stack>
+      </Card>
+      <Stack direction='column' spacing={2} height='100%'>
+        {isLoading && <CargadoTareas />}
+        {!isLoading && isEmpty && <SinTareas />}
+        {!isLoading && !isEmpty && (
+          <TareasLista 
+            tareas={tareas} 
+            paginas={paginas} 
+            paginaActual={pagina} 
+            handleCambioDePagina={handleCambioDePagina}
+          />
+        )}
+      </Stack>
     </Stack>
   )
 }

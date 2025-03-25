@@ -1,4 +1,4 @@
-import { Box, Container, Theme, useMediaQuery } from "@mui/material";
+import { Box, Theme, useMediaQuery } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 const Main = () => {
@@ -8,7 +8,7 @@ const Main = () => {
     <Box component="main" sx={{ 
       width: '100%',
       overflowY: 'scroll', 
-      backgroundColor: (theme: Theme) => theme.palette.grey[100],
+      backgroundColor: (theme: Theme) => theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
       borderTopLeftRadius: 8,
       padding: 5,
       ...(isUpMd && { 

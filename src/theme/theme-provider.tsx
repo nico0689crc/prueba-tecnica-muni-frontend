@@ -15,7 +15,7 @@ export function ThemeProvider({ children, ...other }: ThemeProviderProps) {
 
   const theme = createTheme({
     palette: {
-      mode: 'light'
+      mode: 'light',
     }
   });
 
