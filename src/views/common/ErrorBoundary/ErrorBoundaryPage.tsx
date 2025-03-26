@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, Box, CardMedia, Typography } from '@mui/material';
-import ErrorIlustracion from '@/assets/illustrations/error.svg';
+import ErrorIlustracion from '@/assets/error.svg';
 
 const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
   const [hasError, setHasError] = useState(false);

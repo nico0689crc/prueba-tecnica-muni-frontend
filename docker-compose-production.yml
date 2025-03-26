@@ -1,25 +1,15 @@
 version: '3.8'
-
 services:
-  frontend:
-    container_name: kanban-frontend-prod
+  frontend-prod:
+    container_name: municipalidad-frontend-prod
     image: ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_FRONTEND_IMAGE}:prod
     build:
-      context: ./
+      context: .
       target: production
     environment:
       - VITE_APP_API_URL=${VITE_APP_API_URL}
     ports:
       - "${FRONTEND_HOST_PORT}:${FRONTEND_CONTAINER_PORT}"
-    volumes:
-      - type: bind
-        source: ./
-        target: /app
-      - /app/node_modules
+    expose:
+      - 80
     command: nginx -g "daemon off;"
-
-volumes:
-  kanban-dev-db:
-
-networks:
-  kanban-server-dev:

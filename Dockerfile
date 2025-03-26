@@ -17,8 +17,6 @@ RUN chown -R node:node /app/node_modules
 
 COPY . .
 
-USER node
-
 #########################################
 #   BUILD STAGE
 #########################################
