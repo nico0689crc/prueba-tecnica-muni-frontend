@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  frontend:
+    image: ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_FRONTEND_IMAGE}:dev
+    build:
+      context: .
+      target: development
+    environment:
+      - VITE_APP_API_URL=${VITE_APP_API_URL}
+    ports:
+      - "${FRONTEND_HOST_PORT}:${FRONTEND_CONTAINER_PORT}"
+    expose:
+      - 3000
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
+      - /app/node_modules
+    command: npm run dev
