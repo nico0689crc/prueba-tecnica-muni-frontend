@@ -50,9 +50,12 @@ FROM nginx:alpine as production
 
 WORKDIR /app
 
+COPY ./default.conf /etc/nginx/conf.d/default.conf
+
 RUN apk add --no-cache libc6-compat
 
 COPY --from=builder /app/dist /usr/share/nginx/html
+
 
 EXPOSE 80
 
