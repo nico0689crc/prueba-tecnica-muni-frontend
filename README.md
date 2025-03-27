@@ -1,54 +1,42 @@
-# React + TypeScript + Vite
+# Sistema de Gestión de Tareas con Usuarios Múltiples
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción del Proyecto
 
-Currently, two official plugins are available:
+El objetivo de este proyecto es desarrollar un sistema de gestión de tareas que permita a los usuarios crear, editar, listar y eliminar tareas. Cada tarea contará con un estado (pendiente, en progreso, completada) y una prioridad (baja, media, alta). Además, las tareas podrán ser asignadas a múltiples usuarios, fomentando la colaboración. El sistema incluirá roles de usuario para gestionar permisos:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Administrador**: Puede gestionar todas las tareas y asignar múltiples usuarios a una tarea.
+- **Usuario estándar**: Solo puede ver y editar las tareas en las que está asignado.
 
-## Expanding the ESLint configuration
+## Requisitos Funcionales
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. **Asignación múltiple de usuarios**: Cada tarea puede estar vinculada a uno o más usuarios. Por ejemplo, una tarea de "Preparar reporte" puede ser asignada tanto a Juan como a María.
+2. **Visualización de tareas compartidas**: Los usuarios deben poder ver las tareas en las que están involucrados, junto con los nombres de los demás usuarios asignados.
+3. **Gestión por administrador**: Los administradores pueden agregar o eliminar usuarios de una tarea en cualquier momento.
+4. **Seguimiento de tareas**: Una tarea solo puede marcarse como completada cuando todos los usuarios asignados hayan confirmado que han finalizado su parte.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Tecnologías Utilizadas
+- **Frontend**: ReactJs(Vite), Material UI.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Instalación
+1. Clona este repositorio en tu máquina local:
+  ```bash
+  git clone https://github.com/nico0689crc/prueba-tecnica-muni-frontend
+  ```
+4. Instala las dependencias de React:
+  - Abre una terminal en el directorio del proyecto.
+  - Ejecuta el siguiente comando para instalar las dependencias:
+    ```bash
+    npm install
+    ```
+  - Copia el archivo `.env.example` y renómbralo como `.env`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+  - Inicia el servidor de desarrollo de Laravel:
+    - Ejecuta el siguiente comando para iniciar el servidor:
+      ```bash
+      npm run dev
+      ```
+    - Accede al sistema desde tu navegador en `http://localhost:3000`.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Licencia
+
+Este proyecto está bajo la licencia [MIT](LICENSE).

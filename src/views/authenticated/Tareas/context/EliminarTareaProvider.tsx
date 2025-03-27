@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useSWRConfig }from "swr";
+import { useSWRConfig } from "swr";
 
 import useSnackbar from "@/hooks/useSnackbar";
 import { Tarea } from "@/types/tarea";
@@ -12,42 +12,46 @@ export const EliminarTareaProvider = ({ children }: { children: React.ReactNode 
   const { openSnackbar } = useSnackbar();
   const { mutate } = useSWRConfig();
 
-  const openEliminarTareaDialog = useCallback((tarea: Tarea) => {
-    setTarea(tarea);
-    setDialogEliminarTareaOpen(true);
-  }, [setTarea, setDialogEliminarTareaOpen]);
+  const openEliminarTareaDialog = useCallback(
+    (tarea: Tarea) => {
+      setTarea(tarea);
+      setDialogEliminarTareaOpen(true);
+    },
+    []
+  );
 
   const closeEliminarTareaDialog = useCallback(() => {
     setTarea(null);
     setDialogEliminarTareaOpen(false);
-  }, [setTarea, setDialogEliminarTareaOpen]);
+  }, []);
 
-  const handleEliminarTarea = useCallback(async (page: number) => {
-    if (tarea) {
+  const handleEliminarTarea = useCallback(
+    async (page: number) => {
+      if (!tarea) return;
+
       try {
         await deleteFetcher(`/tareas/${tarea.id}`);
-        console.log(`/tareas?page=${page}`);
-        
         mutate(`/tareas?page=${page}`);
-        openSnackbar('La tarea ha sido eliminada exitosamente.', 'success');
+        openSnackbar("La tarea ha sido eliminada exitosamente.", "success");
       } catch (error: any) {
-        openSnackbar(error?.message ??'Ocurrió un error al eliminar la tarea.', 'error');
+        openSnackbar(error?.message ?? "Ocurrió un error al eliminar la tarea.", "error");
+      } finally {
+        setDialogEliminarTareaOpen(false);
       }
-      setDialogEliminarTareaOpen(false);
-    }
-  }, [tarea, setDialogEliminarTareaOpen, openSnackbar]);
-
-  const value = useMemo(() => ({
-    tarea,
-    isDialogEliminarTareaOpen,
-    openEliminarTareaDialog,
-    closeEliminarTareaDialog, 
-    handleEliminarTarea 
-  }), [handleEliminarTarea, tarea, isDialogEliminarTareaOpen, openEliminarTareaDialog, closeEliminarTareaDialog]);
-
-  return (
-    <EliminarTareaContext.Provider value={value}>
-      {children}
-    </EliminarTareaContext.Provider>
+    },
+    [tarea, mutate, openSnackbar]
   );
-} 
+
+  const value = useMemo(
+    () => ({
+      tarea,
+      isDialogEliminarTareaOpen,
+      openEliminarTareaDialog,
+      closeEliminarTareaDialog,
+      handleEliminarTarea,
+    }),
+    [tarea, isDialogEliminarTareaOpen, openEliminarTareaDialog, closeEliminarTareaDialog, handleEliminarTarea]
+  );
+
+  return <EliminarTareaContext.Provider value={value}>{children}</EliminarTareaContext.Provider>;
+};

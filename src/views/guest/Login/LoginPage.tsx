@@ -6,7 +6,6 @@ import useAuth from "@/hooks/useAuth";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import UsuariosBox from "./UsariosBox";
-import MasUsuariosDialog from "./MasUsuariosDialog";
 
 const Login = () => { 
   const { login } = useAuth();
@@ -131,7 +130,9 @@ const Login = () => {
       </Formik>
       <UsuariosBox titulo="Administrador" email="administrador@tareas.com" password="password" />
       <UsuariosBox titulo="Estandard" email="estandard_1@tareas.com" password="password" />
-      <MasUsuariosDialog />
+      <UsuariosBox titulo="Estandard" email="estandard_2@tareas.com" password="password" />
+      <UsuariosBox titulo="Estandard" email="estandard_3@tareas.com" password="password" />
+      <UsuariosBox titulo="Estandard" email="estandard_4@tareas.com" password="password" />
     </Card>
   );
 }

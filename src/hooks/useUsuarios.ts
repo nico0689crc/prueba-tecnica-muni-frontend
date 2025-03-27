@@ -9,12 +9,9 @@ export const useUsuarios = () => {
     isLoading,
     isValidating,
     error,
-  } : {
-    data: Usuario[],
-    isLoading: boolean,
-    isValidating: boolean,
-    error: any,
-  } = useSWR(`/usuarios`, fetcher);
+  } = useSWR<Usuario[]>(`/usuarios`, fetcher);
+
+  const isEmpty = !isLoading && !error && usuarios && usuarios.length === 0;
 
   const memoizedValue = useMemo(
     () => ({
@@ -22,8 +19,30 @@ export const useUsuarios = () => {
       isLoading,
       error,
       isValidating,
+      isEmpty,
     }),
-    [usuarios, isLoading, error, isValidating]
+    [usuarios, isLoading, error, isValidating,]
+  );
+
+  return memoizedValue;
+}
+
+export const useUsuario = (id: string) => {
+  const {
+    data: usuario,
+    isLoading,
+    isValidating,
+    error,
+  } = useSWR<Usuario>(`/usuarios/${id}`, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      usuario,
+      isLoading,
+      error,
+      isValidating,
+    }),
+    [usuario, isLoading, error, isValidating]
   );
 
   return memoizedValue;

@@ -9,6 +9,9 @@ const Inicio = Loadable(lazy(() => import('@/views/authenticated/Inicio/InicioPa
 const Tareas = Loadable(lazy(() => import('@/views/authenticated/Tareas/TareasPage')));
 const AgregarTareas = Loadable(lazy(() => import('@/views/authenticated/Tareas/AgregarTareasPage')));
 const EditarTareas = Loadable(lazy(() => import('@/views/authenticated/Tareas/EditarTareasPage')));
+const Usuarios = Loadable(lazy(() => import('@/views/authenticated/Usuarios/UsuariosPage')));
+const AgregarUsuarios = Loadable(lazy(() => import('@/views/authenticated/Usuarios/AgregarUsuarioPage')));
+const EditarUsuarios = Loadable(lazy(() => import('@/views/authenticated/Usuarios/EditarUsuarioPage')));
 const NoAutorizadoPage = Loadable(lazy(() => import('@/views/common/NoAutorizado/NoAutorizadoPage')));
 const NoEncontradoPage = Loadable(lazy(() => import('@/views/common/NoEncontrado/NoEncontradoPage')));
 const Trabajando = Loadable(lazy(() => import('@/views/common/Trabajando/TrabajandoPage')));
@@ -45,7 +48,23 @@ const AuthenticatedRoutes = {
       path: '/usuarios',
       element: (
         <RoleGuard requiredRole='admin'>
-          <Trabajando />
+          <Usuarios />
+        </RoleGuard>
+      )
+    },
+    {
+      path: '/usuarios/agregar',
+      element: (
+        <RoleGuard requiredRole='admin'>
+          <AgregarUsuarios />
+        </RoleGuard>
+      )
+    },
+    {
+      path: '/usuarios/:id/editar',
+      element: (
+        <RoleGuard requiredRole='admin'>
+          <EditarUsuarios />
         </RoleGuard>
       )
     },

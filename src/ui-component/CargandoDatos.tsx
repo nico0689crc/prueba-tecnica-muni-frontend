@@ -1,10 +1,10 @@
 import { Stack, CircularProgress, Typography } from "@mui/material";
 
-type CargadoDatosProps = {
+type CargandoDatosProps = {
   mensaje: string;
 }
 
-const CargadoDatos = ({ mensaje } : CargadoDatosProps) => {
+const CargandoDatos = ({ mensaje } : CargandoDatosProps) => {
   return (
     <Stack 
       sx={{ 
@@ -24,4 +24,4 @@ const CargadoDatos = ({ mensaje } : CargadoDatosProps) => {
   );
 } 
 
-export default CargadoDatos;
+export default CargandoDatos;
